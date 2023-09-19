@@ -1,5 +1,7 @@
 import { Schema, model, models } from 'mongoose';
 
+export type DataProviderType = "Olx" | "Otodom" | "Wrona";
+
 const PlaceSchema = new Schema({
 	name: {
 		type: String,
@@ -7,7 +9,6 @@ const PlaceSchema = new Schema({
 	},
 	description: {
 		type: String,
-		required: [true, 'Description is required!']
 	},
 	url: {
 		type: String,
@@ -22,12 +23,9 @@ const PlaceSchema = new Schema({
 			type: String,
 			required: [true, "Country is required"]
 		},
-		street: {
+		address: {
 			type: String,
-			required: [true, "Street is required"]
-		},
-		building: {
-			type: String
+			required: [true, "Address is required"]
 		}
 	},
 	geoLocation: {
@@ -38,6 +36,43 @@ const PlaceSchema = new Schema({
 		coordinates: {
 			type: [Number]
 		}
+	},
+	attributes: {
+		area: {
+			type: Number
+		},
+		roomsCount: {
+			type: Number
+		},
+		floorNumber: {
+			type: Number
+		},
+		totalFloors: {
+			type: Number
+		}
+	},
+	contentHash:{
+		type: String,
+		required: [true, "Hash is required"]
+	},
+	images: {
+		listImageUrl: {
+			type: String
+		}
+	},
+	price: {
+		rentPrice: {
+			type: String
+		},
+		insurancePrice: {
+			type: String
+		},
+		mediaPrice: {
+			type: String
+		}
+	},
+	dataProvider: {
+		type: String
 	}
 });
 

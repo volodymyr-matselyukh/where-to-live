@@ -1,5 +1,7 @@
-import { GetPlaceAddress, ProcessPlace } from "./AppartmentDataRecognizer";
+import { AppartmentDataRecognizer } from "./AppartmentDataRecognizer";
 import { OlxScrapper } from './scrappers/olxScrapper';
+import Place, {DataProviderType} from './db/Place';
+const bcrypt = require('bcrypt');
 
 const main = async () => {
 	// const address = await GetPlaceAddress(`Do wynajęcia od 1 października 3 pok. mieszkanie (62m2) z dużym tarasem; Wrocław,-
@@ -34,11 +36,27 @@ const main = async () => {
 	
 	// allLinks = allLinks.filter(link => link.startsWith("https://www.olx.pl"));
 
-	const apartmentText = await olxScrapper.getApartmentText("https://www.olx.pl/d/oferta/wynajme-mieszkanie-2-pokoje-CID3-IDVomsp.html");
+	const url = "https://www.olx.pl/d/oferta/wynajme-mieszkanie-2-pokoje-CID3-IDVomsp.html";
+
+	const apartmentText = await olxScrapper.getApartmentText(url);
 
 	console.log("text for analysis", apartmentText.fullText);
 
-	const recognizedData = await GetPlaceAddress(apartmentText.fullText, city);
+	const hashingResult = await bcrypt.hash(apartmentText.fullText, 0);
+
+	const dataRecognizer = new AppartmentDataRecognizer();
+
+	const recognizedData = await dataRecognizer.GetPlaceAddress(apartmentText.fullText, city);
+
+	const provider: DataProviderType = "Olx";
+
+	const newPlace = new Place({
+		contentHash: hashingResult,
+		name: apartmentText.title,
+		url: url,
+		dataProvider: provider,
+		location: 
+	});
 
 }
 

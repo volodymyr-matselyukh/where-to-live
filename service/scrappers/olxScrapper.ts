@@ -1,5 +1,5 @@
 import { Scrapper } from "./iScrapper";
-import { ApartmentDetails } from '../models/ApartmentDetails';
+import { ScrappedApartmentDetails } from '../models/ScrappedApartmentDetails';
 import Xray from 'x-ray'
 
 const scrapper = Xray();
@@ -7,7 +7,7 @@ const scrapper = Xray();
 export class OlxScrapper implements Scrapper {
 
 
-	getApartmentText = async (url: string): Promise<ApartmentDetails> => {
+	getApartmentText = async (url: string): Promise<ScrappedApartmentDetails> => {
 
 		try {
 			const result = await scrapper(url,
@@ -23,6 +23,7 @@ export class OlxScrapper implements Scrapper {
 			const concatenatedString = `${result.tags.join(' ')} ${result.price} ${result.title} ${result.description}`;
 
 			return {
+				title: result.title,
 				price: result.price,
 				fullText: concatenatedString
 			};
@@ -33,7 +34,8 @@ export class OlxScrapper implements Scrapper {
 
 		return {
 			price: "",
-			fullText: ""
+			fullText: "",
+			title: ""
 		};
 	}
 
