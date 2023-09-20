@@ -1,5 +1,3 @@
-import axios from 'axios'
-import { GeocodeResponse } from './models/GoogleMapsResponse';
 import { RecognizedApartmentDetails } from './models/RecognizedApartmentDetails';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
@@ -11,28 +9,15 @@ const openai = new OpenAI({
 });
 
 export class AppartmentDataRecognizer {
-	ProcessPlace = async (address: string) => {
-		const encodedAddress = encodeURI(address);
-	
-		const googleApiKey = process.env.GOOGLE_API_KEY;
-	
-		console.log("api key", googleApiKey);
-	
-		const googleMapsApiUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${googleApiKey}`;
-	
-		const response = await axios.get<GeocodeResponse>(googleMapsApiUrl).then(response => response.data);
-		console.log(response.results[0].geometry.location);
-	}
-	
-	GetPlaceAddress = async (textForAnalyzing: string, city: string) => {
+	GetPlaceAddress = async (textForAnalyzing: string, city: string): Promise<RecognizedApartmentDetails> => {
 		const textTemplate = 
 			`read the text below and return recognized data in JSON format: 
 			{ 
 				"city": city,
-			  	"address": address,
+			  	"address": adres mieszkania,
 			  	"floor": piętro as integer,
 			  	"totalFloors": łączna liczba pięter,
-			  	"mediaPrice": czynsz as integer,
+			  	"mediaPrice": czynsz administracyjny as integer,
 			  	"rentPrice": cena najmu as integer,
 				"insurancePrice": kaucija as integer,
 				"area": powierzchnia as integer,
@@ -40,7 +25,8 @@ export class AppartmentDataRecognizer {
 			}
 			
 			Put recognized data under the respective key.
-			Put none if property value wasn't recognized. 
+			Put null if property value wasn't recognized.
+			Please contentrate on address recognition.
 			Put city ${city} if nothing else found.
 			Text for analyzing: ${textForAnalyzing}`;
 	
@@ -56,7 +42,7 @@ export class AppartmentDataRecognizer {
 		console.log("message", message);
 		console.log("recognized object", recognizedObject);
 	
-		return message;
+		return recognizedObject;
 	
 		//console.log(completion.choices[0].message);
 	

@@ -1,7 +1,7 @@
 import { ScrappedApartmentDetails } from "../models/ScrappedApartmentDetails";
 
 export interface Scrapper {
-	getApartmentText: (url: string) => Promise<ScrappedApartmentDetails>,
-	getApartmentUrls: (city: string, page: number) => string[],
-	getNumberOfPages: (city: string) => number
+	getApartmentTextAsync: (url: string) => Promise<ScrappedApartmentDetails>,
+	getApartmentUrlsAsync: (city: string, page: number) => Promise<string[]>,
+	getNumberOfPagesAsync: (city: string) => Promise<number>
 }

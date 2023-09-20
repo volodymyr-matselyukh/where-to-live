@@ -5,14 +5,15 @@ export type DataProviderType = "Olx" | "Otodom" | "Wrona";
 const PlaceSchema = new Schema({
 	name: {
 		type: String,
-		required: [true, 'Name is required!']
+		required: [true, 'Name is required!']		
 	},
 	description: {
 		type: String,
 	},
 	url: {
 		type: String,
-		required: [true, "Url is required!"]
+		required: [true, "Url is required!"],
+		unique: [true, "Url should be unique"]
 	},
 	location: {
 		city: {
@@ -45,7 +46,7 @@ const PlaceSchema = new Schema({
 			type: Number
 		},
 		floorNumber: {
-			type: Number
+			type: String
 		},
 		totalFloors: {
 			type: Number

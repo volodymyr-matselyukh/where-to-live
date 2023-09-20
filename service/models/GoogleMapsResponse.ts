@@ -2,11 +2,13 @@ export interface GeocodeResponse {
 	results: [
 		{
 			geometry: {
-				location: {
-					lat: string,
-					lng: string
-				}
+				location: GeoLocation
 			}
 		}
 	]
+}
+
+export interface GeoLocation {
+	lat: number,
+	lng: number
 }
