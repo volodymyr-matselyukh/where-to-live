@@ -11,7 +11,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-const connectionUri = `mongodb+srv://volodymyrmatselyukh:${process.env.MONGO_ATLAS_PW}@wheretolive.dckqi80.mongodb.net/?retryWrites=true&w=majority`;
+const connectionUri = `mongodb+srv://volodymyrmatselyukh:${process.env.MONGO_ATLAS_PW}@wheretolive.dckqi80.mongodb.net/realestate?retryWrites=true&w=majority`;
 
 mongoose.connect(connectionUri, { 
 	useNewUrlParser: true,
@@ -23,7 +23,7 @@ const Country = 'Poland';
 const dataRecognizer = new AppartmentDataRecognizer();
 
 const main = async () => {
-	await scrapeAsync('Lublin', 'Olx', 10);
+	await scrapeAsync('Lublin', 'Olx', 20);
 }
 
 const scrapeAsync = async (city: string, type: ScrapperType, itemsLimit: number = 0) => {
@@ -31,9 +31,13 @@ const scrapeAsync = async (city: string, type: ScrapperType, itemsLimit: number 
 
 	const linksToScrape = await getLinksToScrapeAsync(scrapper, city, itemsLimit);
 	
+	const promises: Promise<void>[] = [];
+
 	linksToScrape.forEach(async (link) => {
-		await scrapeByLinkAsync(link, scrapper, city);
+		promises.push(scrapeByLinkAsync(link, scrapper, city));
 	});
+
+	Promise.all(promises);
 }
 
 const getLinksToScrapeAsync = async (scrapper: Scrapper, city: string, itemsLimit: number = 0): Promise<string []> => {
