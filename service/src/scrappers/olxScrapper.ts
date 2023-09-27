@@ -1,24 +1,26 @@
 import { Scrapper } from "./iScrapper";
+import { ScrapperType } from "../models/ScrapperTypeEnum";
 import { ScrappedApartmentDetails } from '../models/ScrappedApartmentDetails';
 import Xray from 'x-ray'
 
 const scrapper = Xray();
 
 export class OlxScrapper implements Scrapper {
-
+	
+	get Type(): ScrapperType { return "Olx" };
 
 	getApartmentTextAsync = async (url: string): Promise<ScrappedApartmentDetails> => {
 
 		try {
 			const result = await scrapper(url,
-			{
-				tags: ['[data-testid="main"] ul li p'],
-				price: '[data-testid="ad-price-container"] h3',
-				title: '[data-cy="ad_title"]',
-				description: '[data-cy="ad_description"] div',
-				image: '.swiper-zoom-container img@src'
-			});
-			
+				{
+					tags: ['[data-testid="main"] ul li p'],
+					price: '[data-testid="ad-price-container"] h3',
+					title: '[data-cy="ad_title"]',
+					description: '[data-cy="ad_description"] div',
+					image: '.swiper-zoom-container img@src'
+				});
+
 			console.log("result", result);
 
 			const concatenatedString = `${result.tags.join(' ')} ${result.price} ${result.title} ${result.description}`;

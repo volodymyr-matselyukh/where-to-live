@@ -1,7 +1,5 @@
 import { Schema, model, models } from 'mongoose';
 
-export type DataProviderType = "Olx" | "Otodom" | "Wrona";
-
 const PlaceSchema = new Schema({
 	name: {
 		type: String,
