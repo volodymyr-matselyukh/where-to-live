@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import { AppError, HttpCode } from "./appError";
 
+import router from './routers/index';
+
 dotenv.config();
 
 const app = express();
@@ -31,6 +33,8 @@ const connectionUri = `mongodb+srv://volodymyrmatselyukh:${process.env.MONGO_ATL
 mongoose.connect(connectionUri);
 mongoose.connection.on('error', 
 	((error: Error) => console.error(error)));
+
+app.use('/', router());
 
 app.use('/', (req, res, next) => {
 	res.status(200).json({message: "I am alive"});

@@ -9,9 +9,9 @@ export default interface Pin
 		name: string;
 		imageUrl: string;
 		link: string;
-		price: number;
-		media: number;
-		insurancePrice: number;
+		price: string;
+		media: string;
+		insurancePrice: string;
 		area: number;
 		rooms: number;
 		provider: ProviderType;

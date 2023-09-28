@@ -1,6 +1,18 @@
+"use client";
+
 import { Map } from "../components/Map";
-import GoogleMapReact from 'google-map-react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 export default function Home() {
-	return <Map />;
+	
+
+	return (
+		<QueryClientProvider client={queryClient}>
+			<Map />
+			<ReactQueryDevtools initialIsOpen={false} />
+		</QueryClientProvider>
+	);
 }
